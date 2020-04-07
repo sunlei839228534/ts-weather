@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React,{useState,useEffect} from 'react'
+import {createAxios,key} from './api/request'
+import {UserInfoResponse, weatherResponse} from './types/res'
 
-function App() {
+function App () {
+  const [staticMap,setStaticMap] = useState('')
+  useEffect(() => {
+    createAxios<UserInfoResponse>(`v3/ip?key=${key}`).then(res=>{
+      console.log(res)
+    })
+  },[])
+  useEffect(() => {
+    createAxios<string>(`v3/staticmap?location=121.757560,31.144538&zoom=10&key=${key}`).then(res =>{
+      setStaticMap(encodeURI(res.data))
+    })
+  },[])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <img src={`https://restapi.amap.com/v3/staticmap?location=121.757560,31.144538&zoom=10&key=${key}`} alt=""/>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
